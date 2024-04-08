@@ -22,22 +22,39 @@ import {
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import { Separator } from "@/components/ui/separator";
 import AddFieldForm from "./AddFieldForm";
+import { register } from "module";
+
+interface formType {
+  formName: string;
+  inputFields: {
+    inputName: string;
+    type: string;
+    options: string[];
+  }[];
+}
 
 export default function CreateForm() {
-  const form = useForm({
+  const form = useForm<formType>({
     defaultValues: {
       formName: "",
-      fields: [],
+      inputFields: [
+        {
+          inputName: "",
+          type: "",
+          options: [""],
+        },
+      ],
     },
   });
-
-  const onSubmit = (values: {
-    formName: string;
-    fields: { name: string; type: string; options: string }[];
-  }) => {
+  const { register, control } = form;
+  const { fields, append } = useFieldArray({
+    name: "inputFields",
+    control,
+  });
+  const onSubmit = (values: formType) => {
     console.log(values);
   };
 
@@ -57,7 +74,7 @@ export default function CreateForm() {
                       <FormControl>
                         <Input
                           placeholder="Enter your form name"
-                          {...field}
+                          {...register("formName")}
                           className="w-1/3"
                         />
                       </FormControl>
@@ -66,6 +83,7 @@ export default function CreateForm() {
                   )}
                 />
               </div>
+              <AddFieldForm form={form} inputFields={fields} append={append} />
             </div>
             <CardFooter className="flex justify-between">
               <Button variant="outline">Cancel</Button>
