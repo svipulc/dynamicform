@@ -3,11 +3,17 @@
 import React from "react";
 import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
-import { formData, OptionType } from "@/constant";
+import {
+  formData,
+  InputField,
+  LocalFormData,
+  OptionType,
+  Root2,
+} from "@/constant";
 import DynamicFormField from "./DynamicFormField";
 import { Button } from "./ui/button";
 
-export default function FullForm({ fields }: { fields: formData[] }) {
+export default function FullForm({ fields }: { fields: InputField[] }) {
   const form = useForm({
     defaultValues: {
       firstName: "",
@@ -29,10 +35,6 @@ export default function FullForm({ fields }: { fields: formData[] }) {
     line2: string;
   }) => {
     //handle form
-
-    if (values.line1 && values.line2) {
-      values.address = `${values.line1} ${values.line2}`;
-    }
     console.log(values);
   };
 
@@ -44,16 +46,17 @@ export default function FullForm({ fields }: { fields: formData[] }) {
       >
         <div className="space-y-4 flex w-full flex-col">
           {fields &&
-            fields.map((field) => (
-              <DynamicFormField
-                key={field.label}
-                type={field.type}
-                label={field.label}
-                control={form.control}
-                tag={field.tag}
-                Options={field.options!}
-                fields={field}
-              />
+            fields.map((field, index) => (
+              <>
+                <DynamicFormField
+                  type={field.type}
+                  label={field.inputName}
+                  control={form.control}
+                  tag={field.type}
+                  Options={field.options!}
+                  // fields={field}
+                />
+              </>
             ))}
         </div>
       </form>

@@ -27,6 +27,19 @@ export interface OptionType {
   value: string;
 }
 
+export type LocalFormData = Root2[];
+
+export interface Root2 {
+  formName: string;
+  inputFields: InputField[];
+}
+
+export interface InputField {
+  inputName: string;
+  type: string;
+  options: string[];
+}
+
 export interface formData {
   tag: string;
   label: string;
@@ -170,3 +183,13 @@ export const DummyFormData: formData[] = [
 //     ],
 //   },
 // ];
+
+const form = [
+  {
+    formName: "Login Form",
+    inputFields: [
+      { inputName: "Email", type: "text", options: [] },
+      { inputName: "Password", type: "text", options: [] },
+    ],
+  },
+];

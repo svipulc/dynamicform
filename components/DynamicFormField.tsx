@@ -32,8 +32,8 @@ interface DynamicFormFieldProps {
   placeholder?: string;
   type?: string;
   tag: string;
-  Options?: OptionType[];
-  fields?: formData;
+  Options?: string[];
+  // fields?: formData;
 }
 
 export default function DynamicFormField({
@@ -43,12 +43,12 @@ export default function DynamicFormField({
   type,
   tag,
   Options,
-  fields,
-}: DynamicFormFieldProps) {
+}: // fields,
+DynamicFormFieldProps) {
   // required switch method to display different input method and option
 
   switch (tag) {
-    case "input":
+    case "text":
       return (
         <FormField
           control={control}
@@ -111,11 +111,7 @@ export default function DynamicFormField({
                 </FormControl>
                 <SelectContent>
                   {Options?.map((option) => {
-                    return (
-                      <SelectItem value={option.value}>
-                        {option.label}
-                      </SelectItem>
-                    );
+                    return <SelectItem value={option}>{option}</SelectItem>;
                   })}
                 </SelectContent>
               </Select>
@@ -126,35 +122,35 @@ export default function DynamicFormField({
         />
       );
 
-    case "fields":
-      return (
-        <>
-          {fields?.label && <FormLabel>{fields?.label}</FormLabel>}
-          <div className="ps-6  pt-4">
-            {fields?.fields?.map((subField) => {
-              return (
-                <FormField
-                  control={control}
-                  name={subField.text!}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{subField.label}</FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          placeholder={placeholder}
-                          type={subField.type}
-                          className="w-full"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              );
-            })}
-          </div>
-        </>
-      );
+    // case "fields":
+    //   return (
+    //     <>
+    //       {fields?.label && <FormLabel>{fields?.label}</FormLabel>}
+    //       <div className="ps-6  pt-4">
+    //         {fields?.fields?.map((subField) => {
+    //           return (
+    //             <FormField
+    //               control={control}
+    //               name={subField.text!}
+    //               render={({ field }) => (
+    //                 <FormItem>
+    //                   <FormLabel>{subField.label}</FormLabel>
+    //                   <FormControl>
+    //                     <Input
+    //                       {...field}
+    //                       placeholder={placeholder}
+    //                       type={subField.type}
+    //                       className="w-full"
+    //                     />
+    //                   </FormControl>
+    //                   <FormMessage />
+    //                 </FormItem>
+    //               )}
+    //             />
+    //           );
+    //         })}
+    //       </div>
+    //     </>
+    //   );
   }
 }

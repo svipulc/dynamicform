@@ -26,13 +26,14 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { Separator } from "@/components/ui/separator";
 import AddFieldForm from "./AddFieldForm";
 import { register } from "module";
+import Link from "next/link";
 
 interface formType {
   formName: string;
   inputFields: {
     inputName: string;
     type: string;
-    options: string[];
+    options?: string[] | string;
   }[];
 }
 
@@ -44,20 +45,32 @@ export default function CreateForm() {
         {
           inputName: "",
           type: "",
-          options: [""],
+          options: [],
         },
       ],
     },
   });
   const { register, control } = form;
-  const { fields, append } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     name: "inputFields",
     control,
   });
-  const onSubmit = (values: formType) => {
-    console.log(values);
-  };
 
+  const onSubmit = (values: formType) => {
+    const localData = [{ ...values }];
+
+    localData.map((f, i) => {
+      f.inputFields.map((field, index) => {
+        if (field.options && typeof field?.options == "string") {
+          const a = field?.options.split(";");
+          field.options = a;
+        }
+      });
+    });
+
+    localStorage.setItem("form", JSON.stringify(localData));
+    console.log(localData);
+  };
   return (
     <Card className="w-full">
       <CardContent className="pt-4">
@@ -75,7 +88,7 @@ export default function CreateForm() {
                         <Input
                           placeholder="Enter your form name"
                           {...register("formName")}
-                          className="w-1/3"
+                          className="w-1/3 focus-visible:ring-0 focus-visible:ring-offset-0"
                         />
                       </FormControl>
                       <FormMessage />
@@ -83,10 +96,17 @@ export default function CreateForm() {
                   )}
                 />
               </div>
-              <AddFieldForm form={form} inputFields={fields} append={append} />
+              <AddFieldForm
+                form={form}
+                inputFields={fields}
+                append={append}
+                remove={remove}
+              />
             </div>
-            <CardFooter className="flex justify-between">
-              <Button variant="outline">Cancel</Button>
+            <CardFooter className="flex justify-between mt-3 p-0">
+              <Button variant="outline" type="button">
+                <Link href={"/admin"}>Cancel</Link>
+              </Button>
               <Button type="submit">Save</Button>
             </CardFooter>
           </form>
