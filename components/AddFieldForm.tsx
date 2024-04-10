@@ -1,4 +1,4 @@
-import React, { EventHandler, SyntheticEvent } from "react";
+import React, { Fragment, useState } from "react";
 import {
   FieldArrayWithId,
   UseFieldArrayAppend,
@@ -34,11 +34,16 @@ interface formType {
     inputName: string;
     type: string;
     options?: string[] | string;
+    Subfields?: {
+      inputName: string;
+      type: string;
+      options?: string[] | string;
+    }[];
   }[];
 }
 
 interface AddFieldsFormProps {
-  inputFields: FieldArrayWithId<formType, "inputFields", "id">[]; // change required
+  inputFields: FieldArrayWithId<formType, "inputFields", "id">[];
   form: UseFormReturn<formType, any, undefined>;
   append: UseFieldArrayAppend<formType, "inputFields">;
   remove: UseFieldArrayRemove;
@@ -51,16 +56,21 @@ export default function AddFieldForm({
   remove,
 }: AddFieldsFormProps) {
   const { register, watch } = form;
-
+  const [subFieldState, setSubFieldState] = useState([]);
   return (
-    <main>
+    <div>
       <h1 className="text-2xl font-normal">Input Creator</h1>
       <div>
         <div className="grid w-full items-center gap-4">
-          <div className="flex flex-col space-y-1.5">
+          <div className="flex flex-wrap space-y-1.5">
             {inputFields.map((field, i) => (
-              <>
-                <Accordion type="single" collapsible className="w-1/3 p-2">
+              <Fragment key={i}>
+                <Accordion
+                  type="single"
+                  collapsible
+                  className="w-1/3 p-2"
+                  key={field.id}
+                >
                   <AccordionItem value="item-1">
                     <AccordionTrigger>
                       {watch(`inputFields.${i}.inputName`) === ""
@@ -102,6 +112,10 @@ export default function AddFieldForm({
                               </FormControl>
                               <SelectContent>
                                 <SelectItem value="text">Text</SelectItem>
+                                <SelectItem value="password">
+                                  Password
+                                </SelectItem>
+                                <SelectItem value="email">Email</SelectItem>
                                 <SelectItem value="select">Select</SelectItem>
                                 <SelectItem value="checkbox">
                                   CheckBox
@@ -110,6 +124,7 @@ export default function AddFieldForm({
                                   Text Area
                                 </SelectItem>
                                 <SelectItem value="switch">Switch</SelectItem>
+                                <SelectItem value="button">Button</SelectItem>
                               </SelectContent>
                             </Select>
                             <FormMessage />
@@ -136,6 +151,7 @@ export default function AddFieldForm({
                           )}
                         />
                       ) : null}
+                      {/* for subfield */}
 
                       {i > 0 && (
                         <div>
@@ -153,7 +169,7 @@ export default function AddFieldForm({
                     </AccordionContent>
                   </AccordionItem>
                 </Accordion>
-              </>
+              </Fragment>
             ))}
           </div>
         </div>
@@ -168,6 +184,6 @@ export default function AddFieldForm({
           Add
         </Button>
       </div>
-    </main>
+    </div>
   );
 }

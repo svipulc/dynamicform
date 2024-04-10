@@ -27,6 +27,9 @@ import { Separator } from "@/components/ui/separator";
 import AddFieldForm from "./AddFieldForm";
 import { register } from "module";
 import Link from "next/link";
+import { LocalFormData } from "@/constant";
+import { redirect } from "next/navigation";
+import { url } from "inspector";
 
 interface formType {
   formName: string;
@@ -34,6 +37,11 @@ interface formType {
     inputName: string;
     type: string;
     options?: string[] | string;
+    Subfields?: {
+      inputName: string;
+      type: string;
+      options?: string[] | string;
+    }[];
   }[];
 }
 
@@ -46,6 +54,13 @@ export default function CreateForm() {
           inputName: "",
           type: "",
           options: [],
+          Subfields: [
+            {
+              inputName: "",
+              type: "",
+              options: [],
+            },
+          ],
         },
       ],
     },
@@ -55,12 +70,20 @@ export default function CreateForm() {
     name: "inputFields",
     control,
   });
+  // const {
+  //   fields: subFields,
+  //   append: subAppend,
+  //   remove: subRemove,
+  // } = useFieldArray({
+  //   name: `inputFields.${number}.Subfields`,
+  //   control,
+  // });
 
   const onSubmit = (values: formType) => {
     const localData = [{ ...values }];
 
     localData.map((f, i) => {
-      f.inputFields.map((field, index) => {
+      f.inputFields.map((field) => {
         if (field.options && typeof field?.options == "string") {
           const a = field?.options.split(";");
           field.options = a;
@@ -68,8 +91,16 @@ export default function CreateForm() {
       });
     });
 
-    localStorage.setItem("form", JSON.stringify(localData));
+    const existingData = localStorage.getItem("form");
+    if (existingData) {
+      const data: LocalFormData = JSON.parse(existingData);
+      const newData = [...data, ...localData];
+      localStorage.setItem("form", JSON.stringify(newData));
+    } else {
+      localStorage.setItem("form", JSON.stringify(localData));
+    }
     console.log(localData);
+    redirect("/admin");
   };
   return (
     <Card className="w-full">

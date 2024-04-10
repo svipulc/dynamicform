@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import {
   Form,
@@ -25,6 +26,8 @@ import { Label } from "./ui/label";
 import { formData, OptionType } from "@/constant";
 import { render } from "react-dom";
 import { cn } from "@/lib/utils";
+import { Checkbox } from "./ui/checkbox";
+import { Textarea } from "./ui/textarea";
 
 interface DynamicFormFieldProps {
   control: any; // change required useForm.Control;
@@ -60,7 +63,49 @@ DynamicFormFieldProps) {
                 <Input
                   {...field}
                   placeholder={placeholder}
-                  type={type}
+                  type={tag}
+                  className="w-full"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      );
+    case "email":
+      return (
+        <FormField
+          control={control}
+          name={label!}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{label}</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  placeholder={placeholder}
+                  type={tag}
+                  className="w-full"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      );
+    case "password":
+      return (
+        <FormField
+          control={control}
+          name={label!}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{label}</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  placeholder={placeholder}
+                  type={tag}
                   className="w-full"
                 />
               </FormControl>
@@ -76,14 +121,12 @@ DynamicFormFieldProps) {
       return (
         <FormField
           control={control}
-          name="twoFactor"
+          name={label}
           render={({ field }) => (
             <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
               <div className="space-y-0.5">
                 <FormLabel className="text-base">{label}</FormLabel>
-                <FormDescription>
-                  Enable your two factor authentication for better security
-                </FormDescription>
+                <FormDescription></FormDescription>
               </div>
               <FormControl>
                 <Switch
@@ -99,7 +142,7 @@ DynamicFormFieldProps) {
       return (
         <FormField
           control={control}
-          name={type!}
+          name={label}
           render={({ field }) => (
             <FormItem>
               <FormLabel>{label}</FormLabel>
@@ -115,13 +158,54 @@ DynamicFormFieldProps) {
                   })}
                 </SelectContent>
               </Select>
-              <FormDescription>Discover your stack friends.</FormDescription>
+              <FormDescription></FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
       );
-
+    case "checkbox":
+      return (
+        <FormField
+          control={control}
+          name={label}
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+              <FormControl>
+                <Checkbox
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+              <div className="space-y-1 leading-none">
+                <FormLabel>{label}</FormLabel>
+                <FormDescription></FormDescription>
+              </div>
+            </FormItem>
+          )}
+        />
+      );
+    case "textArea":
+      return (
+        <FormField
+          control={control}
+          name={label}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{label}</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder={label}
+                  className="resize-none"
+                  {...field}
+                />
+              </FormControl>
+              <FormDescription></FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      );
     // case "fields":
     //   return (
     //     <>

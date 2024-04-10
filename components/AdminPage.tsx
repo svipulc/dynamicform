@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import DisplayForm from "./DisplayForm";
 
 export default function AdminPage() {
   return (
@@ -8,10 +9,9 @@ export default function AdminPage() {
       <h1 className="text-4xl font-normal">AdminPage</h1>
       <div className="pt-4">Create Your Custom Form here.</div>
 
-      <div className="flex justify-around items-center">
-        <div className="w-[200px] shadow-md h-[200px] mt-4 p-4">
-          <p> Display all the Created Form here</p>
-        </div>
+      <div className="flex justify-around items-center ">
+        <DisplayForm />
+
         <div>
           <Button
             variant={"default"}

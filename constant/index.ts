@@ -35,6 +35,7 @@ export interface Root2 {
 }
 
 export interface InputField {
+  id: string;
   inputName: string;
   type: string;
   options: string[];
