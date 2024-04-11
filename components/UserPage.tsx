@@ -22,9 +22,12 @@ import {
   SelectValue,
 } from "./ui/select";
 
+let count = 0;
+
 export default function UserPage() {
   const [currentForm, setCurrentForm] = useState("Register Form");
   const [formData, setFormData] = useState<Root2>({
+    id: "",
     formName: "",
     inputFields: [],
   });
@@ -81,9 +84,12 @@ export default function UserPage() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {options?.map((option) => {
-                        return <SelectItem value={option}>{option}</SelectItem>;
-                      })}
+                      {options &&
+                        options.map((option) => {
+                          return (
+                            <SelectItem value={option}>{option}</SelectItem>
+                          );
+                        })}
                     </SelectContent>
                   </Select>
                   <FormDescription></FormDescription>
@@ -96,7 +102,7 @@ export default function UserPage() {
 
         <h3 className="text-4xl font-normal">{formData.formName}</h3>
         <div className="mt-4 flex justify-center items-center flex-col p-4">
-          <FullForm fields={formData.inputFields} />
+          <FullForm key={formData.id} fields={formData.inputFields} />
         </div>
       </div>
     </div>

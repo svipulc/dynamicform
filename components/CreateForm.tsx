@@ -23,44 +23,41 @@ import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { useForm, useFieldArray } from "react-hook-form";
-import { Separator } from "@/components/ui/separator";
 import AddFieldForm from "./AddFieldForm";
-import { register } from "module";
 import Link from "next/link";
-import { LocalFormData } from "@/constant";
-import { redirect } from "next/navigation";
+import { InputField, LocalFormData, Root2 } from "@/constant";
+import { redirect, useRouter } from "next/navigation";
 import { url } from "inspector";
 
 interface formType {
+  id: string;
   formName: string;
   inputFields: {
+    id: string;
     inputName: string;
+    inputLabel: string;
+    placeholder: string;
     type: string;
     options?: string[] | string;
-    Subfields?: {
-      inputName: string;
-      type: string;
-      options?: string[] | string;
-    }[];
   }[];
 }
 
-export default function CreateForm() {
+interface CreateFormProps {
+  inputs?: Root2;
+}
+
+export default function CreateForm({ inputs }: CreateFormProps) {
+  const router = useRouter();
   const form = useForm<formType>({
     defaultValues: {
       formName: "",
       inputFields: [
         {
           inputName: "",
+          inputLabel: "",
+          placeholder: "",
           type: "",
           options: [],
-          Subfields: [
-            {
-              inputName: "",
-              type: "",
-              options: [],
-            },
-          ],
         },
       ],
     },
@@ -70,20 +67,13 @@ export default function CreateForm() {
     name: "inputFields",
     control,
   });
-  // const {
-  //   fields: subFields,
-  //   append: subAppend,
-  //   remove: subRemove,
-  // } = useFieldArray({
-  //   name: `inputFields.${number}.Subfields`,
-  //   control,
-  // });
 
   const onSubmit = (values: formType) => {
     const localData = [{ ...values }];
-
     localData.map((f, i) => {
+      f.id = Math.floor(Math.random() * 9999 + 1000).toString();
       f.inputFields.map((field) => {
+        field.id = Math.floor(Math.random() * 999 + 100).toString();
         if (field.options && typeof field?.options == "string") {
           const a = field?.options.split(";");
           field.options = a;
@@ -100,7 +90,7 @@ export default function CreateForm() {
       localStorage.setItem("form", JSON.stringify(localData));
     }
     console.log(localData);
-    redirect("/admin");
+    router.push("/admin");
   };
   return (
     <Card className="w-full">
@@ -118,6 +108,7 @@ export default function CreateForm() {
                       <FormControl>
                         <Input
                           placeholder="Enter your form name"
+                          {...field}
                           {...register("formName")}
                           className="w-1/3 focus-visible:ring-0 focus-visible:ring-offset-0"
                         />
@@ -138,7 +129,7 @@ export default function CreateForm() {
               <Button variant="outline" type="button">
                 <Link href={"/admin"}>Cancel</Link>
               </Button>
-              <Button type="submit">Save</Button>
+              <Button type="submit">Submit</Button>
             </CardFooter>
           </form>
         </Form>

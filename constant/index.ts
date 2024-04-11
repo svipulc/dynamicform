@@ -30,6 +30,7 @@ export interface OptionType {
 export type LocalFormData = Root2[];
 
 export interface Root2 {
+  id: string;
   formName: string;
   inputFields: InputField[];
 }
@@ -37,8 +38,10 @@ export interface Root2 {
 export interface InputField {
   id: string;
   inputName: string;
+  inputLabel: string;
   type: string;
-  options: string[];
+  placeholder: string;
+  options?: string[] | string;
 }
 
 export interface formData {

@@ -28,14 +28,15 @@ import { render } from "react-dom";
 import { cn } from "@/lib/utils";
 import { Checkbox } from "./ui/checkbox";
 import { Textarea } from "./ui/textarea";
+import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 
 interface DynamicFormFieldProps {
   control: any; // change required useForm.Control;
   label: string;
-  placeholder?: string;
-  type?: string;
-  tag: string;
-  Options?: string[];
+  name: string;
+  placeholder: string;
+  type: string;
+  Options?: string[] | string;
   // fields?: formData;
 }
 
@@ -43,19 +44,19 @@ export default function DynamicFormField({
   control,
   label,
   placeholder,
+  name,
   type,
-  tag,
   Options,
 }: // fields,
 DynamicFormFieldProps) {
   // required switch method to display different input method and option
 
-  switch (tag) {
+  switch (type) {
     case "text":
       return (
         <FormField
           control={control}
-          name={label!}
+          name={name}
           render={({ field }) => (
             <FormItem>
               <FormLabel>{label}</FormLabel>
@@ -63,7 +64,7 @@ DynamicFormFieldProps) {
                 <Input
                   {...field}
                   placeholder={placeholder}
-                  type={tag}
+                  type={type}
                   className="w-full"
                 />
               </FormControl>
@@ -76,7 +77,7 @@ DynamicFormFieldProps) {
       return (
         <FormField
           control={control}
-          name={label!}
+          name={name}
           render={({ field }) => (
             <FormItem>
               <FormLabel>{label}</FormLabel>
@@ -84,7 +85,7 @@ DynamicFormFieldProps) {
                 <Input
                   {...field}
                   placeholder={placeholder}
-                  type={tag}
+                  type={type}
                   className="w-full"
                 />
               </FormControl>
@@ -97,7 +98,7 @@ DynamicFormFieldProps) {
       return (
         <FormField
           control={control}
-          name={label!}
+          name={name}
           render={({ field }) => (
             <FormItem>
               <FormLabel>{label}</FormLabel>
@@ -105,7 +106,7 @@ DynamicFormFieldProps) {
                 <Input
                   {...field}
                   placeholder={placeholder}
-                  type={tag}
+                  type={type}
                   className="w-full"
                 />
               </FormControl>
@@ -121,7 +122,7 @@ DynamicFormFieldProps) {
       return (
         <FormField
           control={control}
-          name={label}
+          name={name}
           render={({ field }) => (
             <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
               <div className="space-y-0.5">
@@ -142,20 +143,21 @@ DynamicFormFieldProps) {
       return (
         <FormField
           control={control}
-          name={label}
+          name={name}
           render={({ field }) => (
             <FormItem>
               <FormLabel>{label}</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder={label} />
+                    <SelectValue placeholder={placeholder} />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {Options?.map((option) => {
-                    return <SelectItem value={option}>{option}</SelectItem>;
-                  })}
+                  {!(typeof Options == "string") &&
+                    Options?.map((option) => {
+                      return <SelectItem value={option}>{option}</SelectItem>;
+                    })}
                 </SelectContent>
               </Select>
               <FormDescription></FormDescription>
@@ -168,7 +170,7 @@ DynamicFormFieldProps) {
       return (
         <FormField
           control={control}
-          name={label}
+          name={name}
           render={({ field }) => (
             <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
               <FormControl>
@@ -189,18 +191,52 @@ DynamicFormFieldProps) {
       return (
         <FormField
           control={control}
-          name={label}
+          name={name}
           render={({ field }) => (
             <FormItem>
               <FormLabel>{label}</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder={label}
+                  placeholder={placeholder}
                   className="resize-none"
                   {...field}
                 />
               </FormControl>
               <FormDescription></FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      );
+    case "radio":
+      return (
+        <FormField
+          control={control}
+          name={name}
+          render={({ field }) => (
+            <FormItem className="space-y-3">
+              <FormLabel>{label}</FormLabel>
+              <FormControl>
+                <RadioGroup
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                  className="flex flex-col space-y-1"
+                >
+                  {!(typeof Options == "string") &&
+                    Options?.map((option) => {
+                      return (
+                        <FormItem className="flex items-center space-x-3 space-y-0">
+                          <FormControl>
+                            <RadioGroupItem value={option} />
+                          </FormControl>
+                          <FormLabel className="font-normal">
+                            {option}
+                          </FormLabel>
+                        </FormItem>
+                      );
+                    })}
+                </RadioGroup>
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}

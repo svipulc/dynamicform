@@ -1,15 +1,9 @@
 "use client";
 
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
-import {
-  formData,
-  InputField,
-  LocalFormData,
-  OptionType,
-  Root2,
-} from "@/constant";
+import { InputField } from "@/constant";
 import DynamicFormField from "./DynamicFormField";
 import { Button } from "./ui/button";
 
@@ -18,8 +12,8 @@ export default function FullForm({ fields }: { fields: InputField[] }) {
 
   const onSubmit = (values) => {
     // type change required
-    //handle form
     console.log(values);
+    form.reset();
   };
 
   return (
@@ -34,11 +28,11 @@ export default function FullForm({ fields }: { fields: InputField[] }) {
               <DynamicFormField
                 key={field.id}
                 type={field.type}
-                label={field.inputName}
+                label={field.inputLabel}
+                name={field.inputName}
+                placeholder={field.placeholder}
                 control={form.control}
-                tag={field.type}
-                Options={field.options!}
-                // fields={field}
+                Options={field.options && field.options}
               />
             ))}
         </div>

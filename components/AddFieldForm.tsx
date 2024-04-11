@@ -29,16 +29,15 @@ import {
 } from "@/components/ui/accordion";
 
 interface formType {
+  id: string;
   formName: string;
   inputFields: {
+    id: string;
     inputName: string;
+    inputLabel: string;
+    placeholder: string;
     type: string;
     options?: string[] | string;
-    Subfields?: {
-      inputName: string;
-      type: string;
-      options?: string[] | string;
-    }[];
   }[];
 }
 
@@ -56,7 +55,7 @@ export default function AddFieldForm({
   remove,
 }: AddFieldsFormProps) {
   const { register, watch } = form;
-  const [subFieldState, setSubFieldState] = useState([]);
+
   return (
     <div>
       <h1 className="text-2xl font-normal">Input Creator</h1>
@@ -73,9 +72,9 @@ export default function AddFieldForm({
                 >
                   <AccordionItem value="item-1">
                     <AccordionTrigger>
-                      {watch(`inputFields.${i}.inputName`) === ""
+                      {watch(`inputFields.${i}.inputLabel`) === ""
                         ? `InputField ${i + 1}`
-                        : watch(`inputFields.${i}.inputName`)}
+                        : watch(`inputFields.${i}.inputLabel`)}
                     </AccordionTrigger>
                     <AccordionContent>
                       <FormField
@@ -89,6 +88,40 @@ export default function AddFieldForm({
                                 className="w-full focus-visible:ring-0 focus-visible:ring-offset-0"
                                 {...field}
                                 {...register(`inputFields.${i}.inputName`)}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        name={`inputFields.${i}.inputLabel`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Input Label</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Enter your input Label"
+                                className="w-full focus-visible:ring-0 focus-visible:ring-offset-0"
+                                {...field}
+                                {...register(`inputFields.${i}.inputLabel`)}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        name={`inputFields.${i}.placeholder`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Input Placeholder</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Enter your input placeholder"
+                                className="w-full focus-visible:ring-0 focus-visible:ring-offset-0"
+                                {...field}
+                                {...register(`inputFields.${i}.placeholder`)}
                               />
                             </FormControl>
                             <FormMessage />
@@ -125,6 +158,9 @@ export default function AddFieldForm({
                                 </SelectItem>
                                 <SelectItem value="switch">Switch</SelectItem>
                                 <SelectItem value="button">Button</SelectItem>
+                                <SelectItem value="radio">
+                                  Radio group
+                                </SelectItem>
                               </SelectContent>
                             </Select>
                             <FormMessage />
@@ -132,7 +168,8 @@ export default function AddFieldForm({
                         )}
                       />
                       {/* add condition to for specific type only */}
-                      {watch(`inputFields.${i}.type`) === "select" ? (
+                      {watch(`inputFields.${i}.type`) === "select" ||
+                      watch(`inputFields.${i}.type`) === "radio" ? (
                         <FormField
                           name={`inputFields.${i}.options`}
                           render={({ field }) => (
@@ -177,7 +214,14 @@ export default function AddFieldForm({
           className="mt-2"
           type="button"
           onClick={() => {
-            append({ inputName: "", type: "", options: [] });
+            append({
+              id: "",
+              inputName: "",
+              inputLabel: "",
+              placeholder: "",
+              type: "",
+              options: [],
+            });
             console.log(inputFields);
           }}
         >
