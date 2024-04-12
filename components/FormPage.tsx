@@ -1,8 +1,14 @@
 "use client";
+//Library import
 import React, { useEffect, useState } from "react";
+
+// UI import
 import CreateForm from "./CreateForm";
+
+// Constant type import
 import { LocalFormData, Root2 } from "@/constant";
 
+//FormPage type
 interface formPageProps {
   formId?: string;
 }
@@ -14,13 +20,14 @@ export default function FormPage({ formId }: formPageProps) {
     formName: "",
     inputFields: [],
   });
+
   useEffect(() => {
     if (typeof window !== undefined) {
       const localData = window.localStorage.getItem("form");
       if (localData) {
         const sendData: LocalFormData = JSON.parse(localData);
         sendData.map((f, index) => {
-          console.log(f);
+          // console.log(f);
           if (f.id === currentForm) {
             setFormData(f);
           }

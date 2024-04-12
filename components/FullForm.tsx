@@ -1,11 +1,14 @@
 "use client";
-
-import React, { Fragment, useEffect } from "react";
-import { Form } from "@/components/ui/form";
+// Library import
+import React, { Fragment } from "react";
 import { useForm } from "react-hook-form";
-import { InputField } from "@/constant";
+
+// UI import
+import { Form } from "@/components/ui/form";
 import DynamicFormField from "./DynamicFormField";
-import { Button } from "./ui/button";
+
+// Constant type import
+import { InputField } from "@/constant";
 
 export default function FullForm({ fields }: { fields: InputField[] }) {
   const form = useForm();
@@ -27,12 +30,9 @@ export default function FullForm({ fields }: { fields: InputField[] }) {
             fields.map((field, index) => (
               <DynamicFormField
                 key={field.id}
-                type={field.type}
-                label={field.inputLabel}
-                name={field.inputName}
-                placeholder={field.placeholder}
+                form={form}
+                inField={field}
                 control={form.control}
-                Options={field.options && field.options}
               />
             ))}
         </div>

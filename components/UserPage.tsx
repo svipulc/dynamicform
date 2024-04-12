@@ -1,5 +1,9 @@
 "use client";
-import { Button } from "@/components/ui/button";
+// Library import
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+
+// UI import
 import {
   Form,
   FormControl,
@@ -9,11 +13,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import FullForm from "./FullForm";
-import { LocalFormData, Root2 } from "@/constant";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import {
   Select,
   SelectContent,
@@ -21,8 +20,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import FullForm from "./FullForm";
 
-let count = 0;
+// Constant type import
+import { LocalFormData, Root2 } from "@/constant";
 
 export default function UserPage() {
   const [currentForm, setCurrentForm] = useState("Register Form");
@@ -32,6 +33,7 @@ export default function UserPage() {
     inputFields: [],
   });
   const [options, setOptions] = useState<string[]>([]);
+
   const form = useForm({
     defaultValues: {
       currentForm: "",
@@ -48,7 +50,7 @@ export default function UserPage() {
             options.push(f.formName);
           }
           if (f.formName == currentForm) {
-            console.log(f.inputFields);
+            // console.log(f.inputFields);  remove this also
             setFormData(f);
           }
         });
@@ -56,13 +58,13 @@ export default function UserPage() {
     }
   }, [currentForm]);
 
+  // submit not much required put for under standing purpose
   const onSubmit = () => {
-    console.log("submit");
+    // console.log("submit");
   };
 
   return (
     <div>
-      {/* <h1 className="text-4xl font-normal">UserPage</h1> */}
       <div className="pt-4">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -99,7 +101,6 @@ export default function UserPage() {
             />
           </form>
         </Form>
-
         <h3 className="text-4xl font-normal">{formData.formName}</h3>
         <div className="mt-4 flex justify-center items-center flex-col p-4">
           <FullForm key={formData.id} fields={formData.inputFields} />

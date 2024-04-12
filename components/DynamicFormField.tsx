@@ -1,7 +1,11 @@
 "use client";
+
+// Library import
 import React from "react";
+import { FieldValues, UseFormReturn } from "react-hook-form";
+
+// UI import
 import {
-  Form,
   FormControl,
   FormDescription,
   FormField,
@@ -12,59 +16,56 @@ import {
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import useForm from "react-hook-form";
 import { Button } from "./ui/button";
 import { Switch } from "./ui/switch";
-import { Label } from "./ui/label";
-import { formData, OptionType } from "@/constant";
-import { render } from "react-dom";
-import { cn } from "@/lib/utils";
 import { Checkbox } from "./ui/checkbox";
 import { Textarea } from "./ui/textarea";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 
+// constant type import
+import { InputField } from "@/constant";
+
 interface DynamicFormFieldProps {
   control: any; // change required useForm.Control;
-  label: string;
-  name: string;
-  placeholder: string;
-  type: string;
-  Options?: string[] | string;
-  // fields?: formData;
+  inField: InputField;
+  form: UseFormReturn<FieldValues, any, undefined>;
 }
 
 export default function DynamicFormField({
+  form,
   control,
-  label,
-  placeholder,
-  name,
-  type,
-  Options,
+  inField,
 }: // fields,
 DynamicFormFieldProps) {
   // required switch method to display different input method and option
 
-  switch (type) {
+  const { register } = form;
+
+  switch (inField.type) {
     case "text":
       return (
         <FormField
           control={control}
-          name={name}
+          name={inField.inputName}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{label}</FormLabel>
+              <FormLabel>
+                {inField.inputLabel}
+                {inField.required && <sup className="text-red-500">*</sup>}
+              </FormLabel>
               <FormControl>
                 <Input
-                  {...field}
-                  placeholder={placeholder}
-                  type={type}
+                  // {...field}
+                  {...register(`${inField.inputName}`, {
+                    required: inField.required,
+                  })}
+                  placeholder={inField.placeholder}
+                  type={inField.type}
                   className="w-full"
                 />
               </FormControl>
@@ -77,15 +78,21 @@ DynamicFormFieldProps) {
       return (
         <FormField
           control={control}
-          name={name}
+          name={inField.inputName}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{label}</FormLabel>
+              <FormLabel>
+                {inField.inputLabel}
+                {inField.required && <sup className="text-red-500">*</sup>}
+              </FormLabel>
               <FormControl>
                 <Input
-                  {...field}
-                  placeholder={placeholder}
-                  type={type}
+                  // {...field}
+                  {...register(`${inField.inputName}`, {
+                    required: inField.required,
+                  })}
+                  placeholder={inField.placeholder}
+                  type={inField.type}
                   className="w-full"
                 />
               </FormControl>
@@ -98,15 +105,21 @@ DynamicFormFieldProps) {
       return (
         <FormField
           control={control}
-          name={name}
+          name={inField.inputName}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{label}</FormLabel>
+              <FormLabel>
+                {inField.inputLabel}
+                {inField.required && <sup className="text-red-500">*</sup>}
+              </FormLabel>
               <FormControl>
                 <Input
-                  {...field}
-                  placeholder={placeholder}
-                  type={type}
+                  // {...field}
+                  {...register(`${inField.inputName}`, {
+                    required: inField.required,
+                  })}
+                  placeholder={inField.placeholder}
+                  type={inField.type}
                   className="w-full"
                 />
               </FormControl>
@@ -116,21 +129,27 @@ DynamicFormFieldProps) {
         />
       );
     case "button":
-      return <Button type="submit">{label}</Button>;
+      return <Button type="submit">{inField.inputLabel}</Button>;
 
     case "switch":
       return (
         <FormField
           control={control}
-          name={name}
+          name={inField.inputName}
           render={({ field }) => (
             <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
               <div className="space-y-0.5">
-                <FormLabel className="text-base">{label}</FormLabel>
+                <FormLabel className="text-base">
+                  {inField.inputLabel}
+                  {inField.required && <sup className="text-red-500">*</sup>}
+                </FormLabel>
                 <FormDescription></FormDescription>
               </div>
               <FormControl>
                 <Switch
+                  {...register(`${inField.inputName}`, {
+                    required: inField.required,
+                  })}
                   checked={field.value}
                   onCheckedChange={field.onChange}
                 />
@@ -143,20 +162,33 @@ DynamicFormFieldProps) {
       return (
         <FormField
           control={control}
-          name={name}
+          name={inField.inputName}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{label}</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <FormLabel>
+                {inField.inputLabel}
+                {inField.required && <sup className="text-red-500">*</sup>}
+              </FormLabel>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+                {...register(`${inField.inputName}`, {
+                  required: inField.required,
+                })}
+              >
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder={placeholder} />
+                    <SelectValue placeholder={inField.placeholder} />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {!(typeof Options == "string") &&
-                    Options?.map((option) => {
-                      return <SelectItem value={option}>{option}</SelectItem>;
+                  {!(typeof inField.options == "string") &&
+                    inField.options?.map((option) => {
+                      return (
+                        <SelectItem key={option} value={option}>
+                          {option}
+                        </SelectItem>
+                      );
                     })}
                 </SelectContent>
               </Select>
@@ -170,17 +202,23 @@ DynamicFormFieldProps) {
       return (
         <FormField
           control={control}
-          name={name}
+          name={inField.inputName}
           render={({ field }) => (
             <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
               <FormControl>
                 <Checkbox
+                  {...register(`${inField.inputName}`, {
+                    required: inField.required,
+                  })}
                   checked={field.value}
                   onCheckedChange={field.onChange}
                 />
               </FormControl>
               <div className="space-y-1 leading-none">
-                <FormLabel>{label}</FormLabel>
+                <FormLabel>
+                  {inField.inputLabel}
+                  {inField.required && <sup className="text-red-500">*</sup>}
+                </FormLabel>
                 <FormDescription></FormDescription>
               </div>
             </FormItem>
@@ -191,15 +229,21 @@ DynamicFormFieldProps) {
       return (
         <FormField
           control={control}
-          name={name}
+          name={inField.inputName}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{label}</FormLabel>
+              <FormLabel>
+                {inField.inputLabel}
+                {inField.required && <sup className="text-red-500">*</sup>}
+              </FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder={placeholder}
+                  placeholder={inField.placeholder}
                   className="resize-none"
-                  {...field}
+                  // {...field}
+                  {...register(`${inField.inputName}`, {
+                    required: inField.required,
+                  })}
                 />
               </FormControl>
               <FormDescription></FormDescription>
@@ -212,20 +256,29 @@ DynamicFormFieldProps) {
       return (
         <FormField
           control={control}
-          name={name}
+          name={inField.inputName}
           render={({ field }) => (
             <FormItem className="space-y-3">
-              <FormLabel>{label}</FormLabel>
+              <FormLabel>
+                {inField.inputLabel}
+                {inField.required && <sup className="text-red-500">*</sup>}
+              </FormLabel>
               <FormControl>
                 <RadioGroup
+                  {...register(`${inField.inputName}`, {
+                    required: inField.required,
+                  })}
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                   className="flex flex-col space-y-1"
                 >
-                  {!(typeof Options == "string") &&
-                    Options?.map((option) => {
+                  {!(typeof inField.options == "string") &&
+                    inField.options?.map((option) => {
                       return (
-                        <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormItem
+                          className="flex items-center space-x-3 space-y-0"
+                          key={option}
+                        >
                           <FormControl>
                             <RadioGroupItem value={option} />
                           </FormControl>
@@ -242,6 +295,8 @@ DynamicFormFieldProps) {
           )}
         />
       );
+
+    // for sub fields
     // case "fields":
     //   return (
     //     <>

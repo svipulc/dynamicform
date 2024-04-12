@@ -1,4 +1,7 @@
+//Library import
 import React, { Fragment, useState } from "react";
+
+// UI import
 import {
   FieldArrayWithId,
   UseFieldArrayAppend,
@@ -7,44 +10,37 @@ import {
 } from "react-hook-form";
 import {
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
+} from "@/components/ui/select";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Switch } from "@/components/ui/switch";
 
-interface formType {
-  id: string;
-  formName: string;
-  inputFields: {
-    id: string;
-    inputName: string;
-    inputLabel: string;
-    placeholder: string;
-    type: string;
-    options?: string[] | string;
-  }[];
-}
+// Constant type import
+import { Root2 } from "@/constant";
 
+// Add fields form props type
 interface AddFieldsFormProps {
-  inputFields: FieldArrayWithId<formType, "inputFields", "id">[];
-  form: UseFormReturn<formType, any, undefined>;
-  append: UseFieldArrayAppend<formType, "inputFields">;
+  inputFields: FieldArrayWithId<Root2, "inputFields", "id">[];
+  form: UseFormReturn<Root2, any, undefined>;
+  append: UseFieldArrayAppend<Root2, "inputFields">;
   remove: UseFieldArrayRemove;
 }
 
@@ -63,7 +59,7 @@ export default function AddFieldForm({
         <div className="grid w-full items-center gap-4">
           <div className="flex flex-wrap space-y-1.5">
             {inputFields.map((field, i) => (
-              <Fragment key={i}>
+              <Fragment key={field.id}>
                 <Accordion
                   type="single"
                   collapsible
@@ -77,6 +73,7 @@ export default function AddFieldForm({
                         : watch(`inputFields.${i}.inputLabel`)}
                     </AccordionTrigger>
                     <AccordionContent>
+                      {/* input name filed */}
                       <FormField
                         name={`inputFields.${i}.inputName`}
                         render={({ field }) => (
@@ -94,6 +91,7 @@ export default function AddFieldForm({
                           </FormItem>
                         )}
                       />
+                      {/* input label filed */}
                       <FormField
                         name={`inputFields.${i}.inputLabel`}
                         render={({ field }) => (
@@ -111,6 +109,7 @@ export default function AddFieldForm({
                           </FormItem>
                         )}
                       />
+                      {/* input placeholder filed */}
                       <FormField
                         name={`inputFields.${i}.placeholder`}
                         render={({ field }) => (
@@ -128,6 +127,28 @@ export default function AddFieldForm({
                           </FormItem>
                         )}
                       />
+                      {/* input required filed */}
+                      <FormField
+                        name={`inputFields.${i}.required`}
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-center justify-between rounded-lg border mt-2 p-2">
+                            <div className="space-y-0.5">
+                              <FormLabel className="text-md">
+                                Want to make Required?
+                              </FormLabel>
+                              <FormDescription></FormDescription>
+                            </div>
+                            <FormControl>
+                              <Switch
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                                {...register(`inputFields.${i}.required`)}
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+                      {/* input type select filed */}
                       <FormField
                         name={`inputFields.${i}.type`}
                         render={({ field }) => (
@@ -220,9 +241,10 @@ export default function AddFieldForm({
               inputLabel: "",
               placeholder: "",
               type: "",
+              required: false,
               options: [],
             });
-            console.log(inputFields);
+            // console.log(inputFields); //remove this console log
           }}
         >
           Add

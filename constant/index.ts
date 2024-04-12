@@ -41,6 +41,7 @@ export interface InputField {
   inputLabel: string;
   type: string;
   placeholder: string;
+  required: boolean;
   options?: string[] | string;
 }
 

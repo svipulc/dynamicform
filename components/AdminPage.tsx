@@ -1,17 +1,15 @@
 import React from "react";
-import { Button } from "./ui/button";
 import Link from "next/link";
-import DisplayForm from "./DisplayForm";
+import { Button } from "./ui/button";
+import DisplayForm from "./DisplayFormList";
 
 export default function AdminPage() {
   return (
     <div className="">
       <h1 className="text-4xl font-normal">AdminPage</h1>
       <div className="pt-4">Create Your Custom Form here.</div>
-
       <div className="flex justify-around items-center ">
         <DisplayForm />
-
         <div>
           <Button
             variant={"default"}

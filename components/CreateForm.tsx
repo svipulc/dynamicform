@@ -1,54 +1,36 @@
 "use client";
 
-import React from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+// Library import
+import React, { useEffect, useState } from "react";
+import { useForm, useFieldArray } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
+// UI import
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Label } from "./ui/label";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
-import { useForm, useFieldArray } from "react-hook-form";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import AddFieldForm from "./AddFieldForm";
-import Link from "next/link";
-import { InputField, LocalFormData, Root2 } from "@/constant";
-import { redirect, useRouter } from "next/navigation";
-import { url } from "inspector";
 
-interface formType {
-  id: string;
-  formName: string;
-  inputFields: {
-    id: string;
-    inputName: string;
-    inputLabel: string;
-    placeholder: string;
-    type: string;
-    options?: string[] | string;
-  }[];
-}
+//Constant import
+import { LocalFormData, Root2 } from "@/constant";
 
+// Create Form Props Type
 interface CreateFormProps {
   inputs?: Root2;
 }
 
 export default function CreateForm({ inputs }: CreateFormProps) {
   const router = useRouter();
-  const form = useForm<formType>({
+  const form = useForm<Root2>({
     defaultValues: {
       formName: "",
       inputFields: [
@@ -57,39 +39,60 @@ export default function CreateForm({ inputs }: CreateFormProps) {
           inputLabel: "",
           placeholder: "",
           type: "",
+          required: false,
           options: [],
         },
       ],
     },
   });
-  const { register, control } = form;
+  const { register, control, setValue } = form;
   const { fields, append, remove } = useFieldArray({
     name: "inputFields",
     control,
   });
 
-  const onSubmit = (values: formType) => {
-    const localData = [{ ...values }];
-    localData.map((f, i) => {
-      f.id = Math.floor(Math.random() * 9999 + 1000).toString();
-      f.inputFields.map((field) => {
+  useEffect(() => {
+    if (inputs != undefined) {
+      setValue("id", inputs.id);
+      setValue("formName", inputs.formName);
+      setValue("inputFields", inputs.inputFields);
+    }
+  }, [inputs]);
+
+  // Handling Submit method;
+  const onSubmit = (values: Root2) => {
+    const localData = { ...values };
+
+    // Adding ID in Form and InputFields
+    if (!localData.id) {
+      localData.id = Math.floor(Math.random() * 9999 + 1000).toString();
+    }
+    localData.inputFields.map((field) => {
+      if (!field.id) {
         field.id = Math.floor(Math.random() * 999 + 100).toString();
-        if (field.options && typeof field?.options == "string") {
-          const a = field?.options.split(";");
-          field.options = a;
-        }
-      });
+      }
+      if (field.options && typeof field?.options == "string") {
+        const a = field?.options.split(";");
+        field.options = a;
+      }
     });
 
+    //Checking add already in local storage then add data otherwise add new data in local storage.
     const existingData = localStorage.getItem("form");
     if (existingData) {
       const data: LocalFormData = JSON.parse(existingData);
-      const newData = [...data, ...localData];
+      const updatedData = data.filter((f, index) => {
+        if (f.id != localData.id) {
+          return f;
+        }
+      });
+      const newData = [...updatedData, localData];
       localStorage.setItem("form", JSON.stringify(newData));
+      // console.log("data", newData);
     } else {
-      localStorage.setItem("form", JSON.stringify(localData));
+      localStorage.setItem("form", JSON.stringify([localData]));
     }
-    console.log(localData);
+    // console.log(localData); // remove this console log
     router.push("/admin");
   };
   return (
