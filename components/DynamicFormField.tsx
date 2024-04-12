@@ -2,7 +2,7 @@
 
 // Library import
 import React from "react";
-import { FieldValues, UseFormReturn } from "react-hook-form";
+import { Control, FieldValues, UseFormReturn } from "react-hook-form";
 
 // UI import
 import {
@@ -31,7 +31,7 @@ import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { InputField } from "@/constant";
 
 interface DynamicFormFieldProps {
-  control: any; // change required useForm.Control;
+  control: Control<FieldValues, any>;
   inField: InputField;
   form: UseFormReturn<FieldValues, any, undefined>;
 }

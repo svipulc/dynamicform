@@ -15,6 +15,7 @@ export default function FullForm({ fields }: { fields: InputField[] }) {
 
   const onSubmit = (values) => {
     // type change required
+    // store user data in db
     console.log(values);
     form.reset();
   };
