@@ -103,7 +103,11 @@ export default function UserPage() {
         </Form>
         <h3 className="text-4xl font-normal">{formData.formName}</h3>
         <div className="mt-4 flex justify-center items-center flex-col p-4">
-          <FullForm key={formData.id} fields={formData.inputFields} />
+          <FullForm
+            key={formData.id}
+            fields={formData.inputFields}
+            formName={formData.formName}
+          />
         </div>
       </div>
     </div>

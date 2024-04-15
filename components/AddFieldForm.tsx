@@ -35,6 +35,9 @@ import { Switch } from "@/components/ui/switch";
 
 // Constant type import
 import { Root2 } from "@/constant";
+import SubFieldAdd from "./SubField";
+import SubField from "./SubField";
+import { Separator } from "./ui/separator";
 
 // Add fields form props type
 interface AddFieldsFormProps {
@@ -50,7 +53,7 @@ export default function AddFieldForm({
   append,
   remove,
 }: AddFieldsFormProps) {
-  const { register, watch } = form;
+  const { register, watch, control } = form;
 
   return (
     <div>
@@ -182,6 +185,9 @@ export default function AddFieldForm({
                                 <SelectItem value="radio">
                                   Radio group
                                 </SelectItem>
+                                <SelectItem value="fieldGroup">
+                                  Field Group
+                                </SelectItem>
                               </SelectContent>
                             </Select>
                             <FormMessage />
@@ -210,7 +216,14 @@ export default function AddFieldForm({
                         />
                       ) : null}
                       {/* for subfield */}
-
+                      <h3 className="text-md font-bold my-2">SubFields</h3>
+                      <Separator className="h-1" />
+                      <SubField
+                        nestIndex={i}
+                        control={control}
+                        register={register}
+                        form={form}
+                      />
                       {i > 0 && (
                         <div>
                           <Button

@@ -41,6 +41,16 @@ export default function CreateForm({ inputs }: CreateFormProps) {
           type: "",
           required: false,
           options: [],
+          subFields: [
+            {
+              inputName: "",
+              inputLabel: "",
+              placeholder: "",
+              type: "",
+              required: false,
+              options: [],
+            },
+          ],
         },
       ],
     },
@@ -50,7 +60,6 @@ export default function CreateForm({ inputs }: CreateFormProps) {
     name: "inputFields",
     control,
   });
-
   useEffect(() => {
     if (inputs != undefined) {
       setValue("id", inputs.id);
@@ -75,9 +84,20 @@ export default function CreateForm({ inputs }: CreateFormProps) {
         const a = field?.options.split(";");
         field.options = a;
       }
+      if (field.subFields) {
+        field.subFields.map((field, index) => {
+          if (!field.id) {
+            field.id = Math.floor(Math.random() * 999 + 100).toString();
+          }
+          if (field.options && typeof field?.options == "string") {
+            const a = field?.options.split(";");
+            field.options = a;
+          }
+        });
+      }
     });
 
-    //Checking add already in local storage then add data otherwise add new data in local storage.
+    // Checking add already in local storage then add data otherwise add new data in local storage.
     const existingData = localStorage.getItem("form");
     if (existingData) {
       const data: LocalFormData = JSON.parse(existingData);
@@ -92,7 +112,7 @@ export default function CreateForm({ inputs }: CreateFormProps) {
     } else {
       localStorage.setItem("form", JSON.stringify([localData]));
     }
-    // console.log(localData); // remove this console log
+    console.log(localData); // remove this console log
     router.push("/admin");
   };
   return (

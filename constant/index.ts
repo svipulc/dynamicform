@@ -43,6 +43,16 @@ export interface InputField {
   placeholder: string;
   required: boolean;
   options?: string[] | string;
+  subFields?: subFieldsInput[];
+}
+export interface subFieldsInput {
+  id: string;
+  inputName: string;
+  inputLabel: string;
+  type: string;
+  placeholder: string;
+  required: boolean;
+  options?: string[] | string;
 }
 
 export interface formData {
@@ -198,3 +208,15 @@ const form = [
     ],
   },
 ];
+
+export const fillData = {
+  formName: "Register Form",
+  name: "akash",
+  email: "akash@gmail.com",
+  password: "akash@gmaila.com",
+  role: "Admin",
+  gender: "Male",
+  twoFactor: true,
+  sd: "hello my name is askash",
+  tc: true,
+};

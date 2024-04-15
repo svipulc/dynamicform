@@ -2,7 +2,12 @@
 
 // Library import
 import React from "react";
-import { Control, FieldValues, UseFormReturn } from "react-hook-form";
+import {
+  Control,
+  Controller,
+  FieldValues,
+  UseFormReturn,
+} from "react-hook-form";
 
 // UI import
 import {
@@ -43,7 +48,6 @@ export default function DynamicFormField({
 }: // fields,
 DynamicFormFieldProps) {
   // required switch method to display different input method and option
-
   const { register } = form;
 
   switch (inField.type) {
@@ -169,18 +173,20 @@ DynamicFormFieldProps) {
                 {inField.inputLabel}
                 {inField.required && <sup className="text-red-500">*</sup>}
               </FormLabel>
+
               <Select
                 onValueChange={field.onChange}
                 defaultValue={field.value}
+                value={field.value}
                 {...register(`${inField.inputName}`, {
                   required: inField.required,
                 })}
               >
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder={inField.placeholder} />
-                  </SelectTrigger>
-                </FormControl>
+                {/* <FormControl> */}
+                <SelectTrigger>
+                  <SelectValue placeholder={inField.placeholder} />
+                </SelectTrigger>
+                {/* </FormControl> */}
                 <SelectContent>
                   {!(typeof inField.options == "string") &&
                     inField.options?.map((option) => {
@@ -192,6 +198,7 @@ DynamicFormFieldProps) {
                     })}
                 </SelectContent>
               </Select>
+
               <FormDescription></FormDescription>
               <FormMessage />
             </FormItem>
@@ -236,6 +243,7 @@ DynamicFormFieldProps) {
                 {inField.inputLabel}
                 {inField.required && <sup className="text-red-500">*</sup>}
               </FormLabel>
+
               <FormControl>
                 <Textarea
                   placeholder={inField.placeholder}
@@ -263,6 +271,7 @@ DynamicFormFieldProps) {
                 {inField.inputLabel}
                 {inField.required && <sup className="text-red-500">*</sup>}
               </FormLabel>
+
               <FormControl>
                 <RadioGroup
                   {...register(`${inField.inputName}`, {
@@ -270,6 +279,7 @@ DynamicFormFieldProps) {
                   })}
                   onValueChange={field.onChange}
                   defaultValue={field.value}
+                  value={field.value}
                   className="flex flex-col space-y-1"
                 >
                   {!(typeof inField.options == "string") &&
@@ -297,35 +307,22 @@ DynamicFormFieldProps) {
       );
 
     // for sub fields
-    // case "fields":
-    //   return (
-    //     <>
-    //       {fields?.label && <FormLabel>{fields?.label}</FormLabel>}
-    //       <div className="ps-6  pt-4">
-    //         {fields?.fields?.map((subField) => {
-    //           return (
-    //             <FormField
-    //               control={control}
-    //               name={subField.text!}
-    //               render={({ field }) => (
-    //                 <FormItem>
-    //                   <FormLabel>{subField.label}</FormLabel>
-    //                   <FormControl>
-    //                     <Input
-    //                       {...field}
-    //                       placeholder={placeholder}
-    //                       type={subField.type}
-    //                       className="w-full"
-    //                     />
-    //                   </FormControl>
-    //                   <FormMessage />
-    //                 </FormItem>
-    //               )}
-    //             />
-    //           );
-    //         })}
-    //       </div>
-    //     </>
-    //   );
+    case "fieldGroup":
+      return (
+        <>
+          {inField?.inputLabel && <FormLabel>{inField?.inputLabel}</FormLabel>}
+          <div className="ps-6  pt-4">
+            {inField?.subFields?.map((subField) => {
+              return (
+                <DynamicFormField
+                  inField={subField}
+                  control={control}
+                  form={form}
+                />
+              );
+            })}
+          </div>
+        </>
+      );
   }
 }
