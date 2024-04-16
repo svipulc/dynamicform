@@ -49,7 +49,7 @@ export default function DynamicFormField({
 DynamicFormFieldProps) {
   // required switch method to display different input method and option
   const { register } = form;
-
+  const text = ["offline", "online"];
   switch (inField.type) {
     case "text":
       return (
@@ -154,7 +154,7 @@ DynamicFormFieldProps) {
                   {...register(`${inField.inputName}`, {
                     required: inField.required,
                   })}
-                  checked={field.value}
+                  checked={field.value ? field.value : false}
                   onCheckedChange={field.onChange}
                 />
               </FormControl>
@@ -173,14 +173,11 @@ DynamicFormFieldProps) {
                 {inField.inputLabel}
                 {inField.required && <sup className="text-red-500">*</sup>}
               </FormLabel>
-
+              {field.value ? "yes" : "no"}
               <Select
                 onValueChange={field.onChange}
                 defaultValue={field.value}
                 value={field.value}
-                {...register(`${inField.inputName}`, {
-                  required: inField.required,
-                })}
               >
                 {/* <FormControl> */}
                 <SelectTrigger>
@@ -217,7 +214,7 @@ DynamicFormFieldProps) {
                   {...register(`${inField.inputName}`, {
                     required: inField.required,
                   })}
-                  checked={field.value}
+                  checked={field.value ? field.value : false}
                   onCheckedChange={field.onChange}
                 />
               </FormControl>
@@ -260,6 +257,25 @@ DynamicFormFieldProps) {
           )}
         />
       );
+    // for sub fields
+    case "fieldGroup":
+      return (
+        <>
+          {inField?.inputLabel && <FormLabel>{inField?.inputLabel}</FormLabel>}
+          <div className="ps-6  pt-4">
+            {inField?.subFields?.map((subField) => {
+              return (
+                <DynamicFormField
+                  key={subField.id}
+                  inField={subField}
+                  control={control}
+                  form={form}
+                />
+              );
+            })}
+          </div>
+        </>
+      );
     case "radio":
       return (
         <FormField
@@ -267,23 +283,17 @@ DynamicFormFieldProps) {
           name={inField.inputName}
           render={({ field }) => (
             <FormItem className="space-y-3">
-              <FormLabel>
-                {inField.inputLabel}
-                {inField.required && <sup className="text-red-500">*</sup>}
-              </FormLabel>
-
+              <FormLabel>{inField.inputLabel}</FormLabel>
               <FormControl>
                 <RadioGroup
-                  {...register(`${inField.inputName}`, {
-                    required: inField.required,
-                  })}
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
-                  value={field.value}
+                  defaultValue={field.value ? field.value : ""}
+                  required={inField.required}
+                  value={field.value ? field.value : ""}
                   className="flex flex-col space-y-1"
                 >
-                  {!(typeof inField.options == "string") &&
-                    inField.options?.map((option) => {
+                  {typeof inField.options != "string" &&
+                    inField.options?.map((option, index) => {
                       return (
                         <FormItem
                           className="flex items-center space-x-3 space-y-0"
@@ -304,25 +314,6 @@ DynamicFormFieldProps) {
             </FormItem>
           )}
         />
-      );
-
-    // for sub fields
-    case "fieldGroup":
-      return (
-        <>
-          {inField?.inputLabel && <FormLabel>{inField?.inputLabel}</FormLabel>}
-          <div className="ps-6  pt-4">
-            {inField?.subFields?.map((subField) => {
-              return (
-                <DynamicFormField
-                  inField={subField}
-                  control={control}
-                  form={form}
-                />
-              );
-            })}
-          </div>
-        </>
       );
   }
 }

@@ -211,12 +211,24 @@ const form = [
 
 export const fillData = {
   formName: "Register Form",
+  // firstname: "akash",
+  // lastname: "hello",
+  // email: "akash@gmail.com",
+  // line1: "Bopal,ahemedabad",
+  // state: "Gujarat",
   name: "akash",
-  email: "akash@gmail.com",
+  email: "av@gmail.com",
   password: "akash@gmaila.com",
   role: "Admin",
-  gender: "Male",
+  gender: "Female",
   twoFactor: true,
   sd: "hello my name is askash",
   tc: true,
+  // state: "Gujarat",
+  // mode: "Offline",
+};
+export type fillDatakeys = keyof typeof fillData;
+
+export type objectType = {
+  [keys: string]: string | boolean;
 };

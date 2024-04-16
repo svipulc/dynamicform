@@ -33,7 +33,6 @@ export default function UserPage() {
     inputFields: [],
   });
   const [options, setOptions] = useState<string[]>([]);
-
   const form = useForm({
     defaultValues: {
       currentForm: "",
@@ -89,7 +88,9 @@ export default function UserPage() {
                       {options &&
                         options.map((option) => {
                           return (
-                            <SelectItem value={option}>{option}</SelectItem>
+                            <SelectItem key={option} value={option}>
+                              {option}
+                            </SelectItem>
                           );
                         })}
                     </SelectContent>

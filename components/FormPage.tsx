@@ -7,6 +7,7 @@ import CreateForm from "./CreateForm";
 
 // Constant type import
 import { LocalFormData, Root2 } from "@/constant";
+import useGetFormById from "@/hook/useGetFormById";
 
 //FormPage type
 interface formPageProps {
@@ -14,27 +15,9 @@ interface formPageProps {
 }
 
 export default function FormPage({ formId }: formPageProps) {
-  const [currentForm, setCurrentForm] = useState(formId);
-  const [formData, setFormData] = useState<Root2>({
-    id: "",
-    formName: "",
-    inputFields: [],
-  });
-
-  useEffect(() => {
-    if (typeof window !== undefined) {
-      const localData = window.localStorage.getItem("form");
-      if (localData) {
-        const sendData: LocalFormData = JSON.parse(localData);
-        sendData.map((f, index) => {
-          // console.log(f);
-          if (f.id === currentForm) {
-            setFormData(f);
-          }
-        });
-      }
-    }
-  }, [currentForm]);
+  const { formData } = useGetFormById(
+    typeof formId === "string" ? formId : "Register Form"
+  );
 
   return (
     <div className="flex flex-col min-h-screen">

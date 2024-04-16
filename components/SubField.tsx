@@ -198,7 +198,7 @@ export default function SubField({
                         <FormLabel>Options</FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="Enter your Select options separated by ; "
+                            placeholder="Enter your Select options separated by , "
                             className="w-full focus-visible:ring-0 focus-visible:ring-offset-0"
                             {...field}
                             {...register(
@@ -211,8 +211,7 @@ export default function SubField({
                     )}
                   />
                 ) : null}
-                {/* for subfield */}
-                {/* <SubField nestIndex={i} control={control} register={register} /> */}
+
                 {i > 0 && (
                   <div>
                     <Button

@@ -4,38 +4,34 @@ import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { revalidatePath } from "next/cache";
+import useGetLocalData from "@/hook/useGetLocalData";
 
-function deleteForm(id: string) {
-  if (typeof window !== undefined) {
-    // console.log("in");
-    const localData = window.localStorage.getItem("form");
-    if (localData) {
-      const tempData: LocalFormData = JSON.parse(localData);
-      const updatedData = tempData.filter((f, index) => {
-        if (f.id != id) {
-          return f;
-        }
-      });
-      window.localStorage.setItem("form", JSON.stringify(updatedData));
+function deleteForm(
+  id: string,
+  data: LocalFormData,
+  setData: React.Dispatch<React.SetStateAction<LocalFormData>>
+) {
+  // if (typeof window !== undefined) {
+  //   const localData = window.localStorage.getItem("form");
+  //   if (localData) {
+  //     const tempData: LocalFormData = JSON.parse(localData);
+  const updatedData = data.filter((f, index) => {
+    if (f.id != id) {
+      return f;
     }
-  }
+  });
+  window.localStorage.setItem("form", JSON.stringify(updatedData));
+  setData(updatedData);
 }
+//   // }
+// }
 
 export default function DisplayForm() {
-  const [formList, setFormList] = useState<LocalFormData>([]);
-  useEffect(() => {
-    if (typeof window !== undefined) {
-      // console.log("in");
-      const localData = window.localStorage.getItem("form");
-      if (localData) {
-        const tempData: LocalFormData = JSON.parse(localData);
-        setFormList(tempData);
-      }
-    }
-  }, []);
+  const { localData, setLocalData } = useGetLocalData("form");
+
   return (
     <div className="w-2/3 flex gap-8">
-      {formList.map((f, index) => {
+      {localData.map((f, index) => {
         return (
           <div
             className="w-[200px] h-[200px] shadow-md p-2 mt-4 border rounded-md flex flex-col justify-center items-center"
@@ -49,7 +45,7 @@ export default function DisplayForm() {
               <Button
                 variant={"outline"}
                 className="m-2"
-                onClick={() => deleteForm(f.id)}
+                onClick={() => deleteForm(f.id, localData, setLocalData)}
               >
                 Delete
               </Button>

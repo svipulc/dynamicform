@@ -204,7 +204,7 @@ export default function AddFieldForm({
                               <FormLabel>Options</FormLabel>
                               <FormControl>
                                 <Input
-                                  placeholder="Enter your Select options separated by ; "
+                                  placeholder="Enter your Select options separated by , "
                                   className="w-full focus-visible:ring-0 focus-visible:ring-offset-0"
                                   {...field}
                                   {...register(`inputFields.${i}.options`)}
@@ -215,7 +215,7 @@ export default function AddFieldForm({
                           )}
                         />
                       ) : null}
-                      {/* for subfield */}
+                      {/*  subfield  area */}
                       <h3 className="text-md font-bold my-2">SubFields</h3>
                       <Separator className="h-1" />
                       <SubField

@@ -22,6 +22,7 @@ import AddFieldForm from "./AddFieldForm";
 
 //Constant import
 import { LocalFormData, Root2 } from "@/constant";
+import useGetLocalData from "@/hook/useGetLocalData";
 
 // Create Form Props Type
 interface CreateFormProps {
@@ -30,6 +31,7 @@ interface CreateFormProps {
 
 export default function CreateForm({ inputs }: CreateFormProps) {
   const router = useRouter();
+  const { localData } = useGetLocalData("form");
   const form = useForm<Root2>({
     defaultValues: {
       formName: "",
@@ -70,27 +72,29 @@ export default function CreateForm({ inputs }: CreateFormProps) {
 
   // Handling Submit method;
   const onSubmit = (values: Root2) => {
-    const localData = { ...values };
+    const formData = { ...values };
 
     // Adding ID in Form and InputFields
-    if (!localData.id) {
-      localData.id = Math.floor(Math.random() * 9999 + 1000).toString();
+
+    if (!formData.id) {
+      formData.id = Math.floor(Math.random() * 9999 + 1000).toString();
     }
-    localData.inputFields.map((field) => {
+    formData.inputFields.map((field) => {
       if (!field.id) {
         field.id = Math.floor(Math.random() * 999 + 100).toString();
       }
       if (field.options && typeof field?.options == "string") {
-        const a = field?.options.split(";");
+        const a = field?.options.split(",");
         field.options = a;
       }
+
       if (field.subFields) {
         field.subFields.map((field, index) => {
           if (!field.id) {
             field.id = Math.floor(Math.random() * 999 + 100).toString();
           }
           if (field.options && typeof field?.options == "string") {
-            const a = field?.options.split(";");
+            const a = field?.options.split(",");
             field.options = a;
           }
         });
@@ -98,21 +102,21 @@ export default function CreateForm({ inputs }: CreateFormProps) {
     });
 
     // Checking add already in local storage then add data otherwise add new data in local storage.
-    const existingData = localStorage.getItem("form");
-    if (existingData) {
-      const data: LocalFormData = JSON.parse(existingData);
-      const updatedData = data.filter((f, index) => {
-        if (f.id != localData.id) {
+    // const existingData = localStorage.getItem("form");
+    if (formData) {
+      // const data: LocalFormData = JSON.parse(existingData);
+      const updatedData = localData.filter((f, index) => {
+        if (f.id != formData.id) {
           return f;
         }
       });
-      const newData = [...updatedData, localData];
+      const newData = [...updatedData, formData];
       localStorage.setItem("form", JSON.stringify(newData));
       // console.log("data", newData);
     } else {
-      localStorage.setItem("form", JSON.stringify([localData]));
+      localStorage.setItem("form", JSON.stringify([formData]));
     }
-    console.log(localData); // remove this console log
+    // console.log(newData); // remove this console log
     router.push("/admin");
   };
   return (
@@ -132,7 +136,7 @@ export default function CreateForm({ inputs }: CreateFormProps) {
                         <Input
                           placeholder="Enter your form name"
                           {...field}
-                          {...register("formName")}
+                          {...register("formName", { required: true })}
                           className="w-1/3 focus-visible:ring-0 focus-visible:ring-offset-0"
                         />
                       </FormControl>
