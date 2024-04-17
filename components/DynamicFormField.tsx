@@ -173,11 +173,7 @@ DynamicFormFieldProps) {
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue
-                      placeholder={
-                        field.value ? field.value : inField.placeholder
-                      }
-                    />
+                    <SelectValue placeholder={inField.placeholder} />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
