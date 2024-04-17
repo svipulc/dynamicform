@@ -2,12 +2,7 @@
 
 // Library import
 import React from "react";
-import {
-  Control,
-  Controller,
-  FieldValues,
-  UseFormReturn,
-} from "react-hook-form";
+import { Control, FieldValues, UseFormReturn } from "react-hook-form";
 
 // UI import
 import {
@@ -178,12 +173,15 @@ DynamicFormFieldProps) {
                 onValueChange={field.onChange}
                 defaultValue={field.value}
                 value={field.value}
+                {...register(`${inField.inputName}`, {
+                  required: inField.required,
+                })}
               >
-                {/* <FormControl> */}
-                <SelectTrigger>
-                  <SelectValue placeholder={inField.placeholder} />
-                </SelectTrigger>
-                {/* </FormControl> */}
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder={inField.placeholder} />
+                  </SelectTrigger>
+                </FormControl>
                 <SelectContent>
                   {!(typeof inField.options == "string") &&
                     inField.options?.map((option) => {
@@ -195,7 +193,6 @@ DynamicFormFieldProps) {
                     })}
                 </SelectContent>
               </Select>
-
               <FormDescription></FormDescription>
               <FormMessage />
             </FormItem>
@@ -283,13 +280,19 @@ DynamicFormFieldProps) {
           name={inField.inputName}
           render={({ field }) => (
             <FormItem className="space-y-3">
-              <FormLabel>{inField.inputLabel}</FormLabel>
+              <FormLabel>
+                {inField.inputLabel}
+                {inField.required && <sup className="text-red-500">*</sup>}
+              </FormLabel>
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}
                   defaultValue={field.value ? field.value : ""}
-                  required={inField.required}
                   value={field.value ? field.value : ""}
+                  required={inField.required}
+                  // {...register(`${inField.inputName}`, {
+                  //   required: inField.required,
+                  // })}
                   className="flex flex-col space-y-1"
                 >
                   {typeof inField.options != "string" &&
