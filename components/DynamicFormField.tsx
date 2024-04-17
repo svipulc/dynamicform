@@ -169,17 +169,15 @@ DynamicFormFieldProps) {
                 {inField.required && <sup className="text-red-500">*</sup>}
               </FormLabel>
               {field.value ? "yes" : "no"}
-              <Select
-                onValueChange={field.onChange}
-                defaultValue={field.value}
-                value={field.value}
-                {...register(`${inField.inputName}`, {
-                  required: inField.required,
-                })}
-              >
+
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder={inField.placeholder} />
+                    <SelectValue
+                      placeholder={
+                        field.value ? field.value : inField.placeholder
+                      }
+                    />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
@@ -287,8 +285,8 @@ DynamicFormFieldProps) {
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}
-                  defaultValue={field.value ? field.value : ""}
-                  value={field.value ? field.value : ""}
+                  defaultValue={field.value ? field.value : -1}
+                  value={field.value ? field.value : -1}
                   required={inField.required}
                   // {...register(`${inField.inputName}`, {
                   //   required: inField.required,
