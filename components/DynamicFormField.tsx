@@ -1,7 +1,7 @@
 "use client";
 
 // Library import
-import React from "react";
+import React, { SyntheticEvent } from "react";
 import { Control, FieldValues, UseFormReturn } from "react-hook-form";
 
 // UI import
@@ -29,6 +29,7 @@ import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 
 // constant type import
 import { InputField } from "@/constant";
+import { Value } from "@radix-ui/react-select";
 
 interface DynamicFormFieldProps {
   control: Control<FieldValues, any>;
@@ -170,7 +171,14 @@ DynamicFormFieldProps) {
               </FormLabel>
               {field.value ? "yes" : "no"}
 
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+                value={field.value}
+                {...register(`${inField.inputName}`, {
+                  required: inField.required,
+                })}
+              >
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder={inField.placeholder} />
