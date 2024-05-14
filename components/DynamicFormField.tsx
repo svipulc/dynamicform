@@ -29,7 +29,6 @@ import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 
 // constant type import
 import { InputField } from "@/constant";
-import { Value } from "@radix-ui/react-select";
 
 interface DynamicFormFieldProps {
   control: Control<FieldValues, any>;
@@ -45,7 +44,6 @@ export default function DynamicFormField({
 DynamicFormFieldProps) {
   // required switch method to display different input method and option
   const { register } = form;
-  const text = ["offline", "online"];
   switch (inField.type) {
     case "text":
       return (
@@ -169,8 +167,6 @@ DynamicFormFieldProps) {
                 {inField.inputLabel}
                 {inField.required && <sup className="text-red-500">*</sup>}
               </FormLabel>
-              {field.value ? "yes" : "no"}
-
               <Select
                 onValueChange={field.onChange}
                 defaultValue={field.value}
