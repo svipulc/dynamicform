@@ -162,35 +162,35 @@ DynamicFormFieldProps) {
           control={control}
           name={inField.inputName}
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="flex flex-col gap-2">
               <FormLabel>
                 {inField.inputLabel}
                 {inField.required && <sup className="text-red-500">*</sup>}
               </FormLabel>
-              <Select
-                onValueChange={field.onChange}
+              <select
+                // onChange={field.onChange}
+                className="p-3 rounded-md bg-white border border-slate-200"
                 defaultValue={field.value}
                 value={field.value}
                 {...register(`${inField.inputName}`, {
                   required: inField.required,
                 })}
               >
-                <FormControl>
+                {/* <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder={inField.placeholder} />
                   </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {!(typeof inField.options == "string") &&
-                    inField.options?.map((option) => {
-                      return (
-                        <SelectItem key={option} value={option}>
-                          {option}
-                        </SelectItem>
-                      );
-                    })}
-                </SelectContent>
-              </Select>
+                </FormControl> */}
+
+                {!(typeof inField.options == "string") &&
+                  inField.options?.map((option) => {
+                    return (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    );
+                  })}
+              </select>
               <FormDescription></FormDescription>
               <FormMessage />
             </FormItem>
