@@ -2,7 +2,10 @@
 
 This project demonstrates how to build a dynamic form builder using Next.js version 14 with React Hook Form. It allows users to dynamically create and customize forms with various input fields.
 
+
+General instruction: While create First form set it name as **"Register Form"** After that if you can create any form as per your choice name.
 Demo [Link](https://dynamicform-flame.vercel.app/)
+
 
 ## Table of Contents
 
