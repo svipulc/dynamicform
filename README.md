@@ -22,13 +22,13 @@ This project demonstrates how to build a dynamic form builder using Next.js vers
 1. Clone the repository:
 
    ```
-   git clone https://github.com/your-username/nextjs-form-builder.git
+   git clone https://github.com/react-mern/POC-form-builder.git
    ```
 
 2. Navigate to the project directory:
 
    ```
-   cd nextjs-form-builder
+   cd POC-form-builder
    ```
 
 3. Install dependencies:
