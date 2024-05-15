@@ -60,13 +60,13 @@ export default function AddFieldForm({
       <h1 className="text-2xl font-normal">Input Creator</h1>
       <div>
         <div className="grid w-full items-center gap-4">
-          <div className="flex flex-wrap space-y-1.5">
+          <div className="md:flex md:flex-wrap space-y-1.5">
             {inputFields.map((field, i) => (
               <Fragment key={field.id}>
                 <Accordion
                   type="single"
                   collapsible
-                  className="w-1/3 p-2"
+                  className="md:w-1/3 p-2 w-full"
                   key={field.id}
                 >
                   <AccordionItem value="item-1">

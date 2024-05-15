@@ -11,10 +11,6 @@ function deleteForm(
   data: LocalFormData,
   setData: React.Dispatch<React.SetStateAction<LocalFormData>>
 ) {
-  // if (typeof window !== undefined) {
-  //   const localData = window.localStorage.getItem("form");
-  //   if (localData) {
-  //     const tempData: LocalFormData = JSON.parse(localData);
   const updatedData = data.filter((f, index) => {
     if (f.id != id) {
       return f;
@@ -23,14 +19,12 @@ function deleteForm(
   window.localStorage.setItem("form", JSON.stringify(updatedData));
   setData(updatedData);
 }
-//   // }
-// }
 
 export default function DisplayForm() {
   const { localData, setLocalData } = useGetLocalData("form");
 
   return (
-    <div className="w-2/3 flex gap-8">
+    <div className="w-2/3 md:flex gap-8">
       {localData.map((f, index) => {
         return (
           <div
