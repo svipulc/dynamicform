@@ -26,7 +26,7 @@ import FullForm from "./FullForm";
 import { LocalFormData, Root2 } from "@/constant";
 
 export default function UserPage() {
-  const [currentForm, setCurrentForm] = useState("Register Form");
+  const [currentForm, setCurrentForm] = useState("");
   const [formData, setFormData] = useState<Root2>({
     id: "",
     formName: "",
@@ -44,6 +44,12 @@ export default function UserPage() {
       const localData = window.localStorage.getItem("form");
       if (localData) {
         const sendData: LocalFormData = JSON.parse(localData);
+        if (sendData.length === 0) {
+          return;
+        }
+        if (currentForm == "" && sendData.length > 0) {
+          setCurrentForm(sendData[0].formName);
+        }
         sendData.map((f, index) => {
           if (!options.includes(f.formName)) {
             options.push(f.formName);
@@ -102,14 +108,21 @@ export default function UserPage() {
             />
           </form>
         </Form>
-        <h3 className="text-4xl font-normal">{formData.formName}</h3>
-        <div className="mt-4 flex justify-center items-center flex-col p-4">
-          <FullForm
-            key={formData.id}
-            fields={formData.inputFields}
-            formName={formData.formName}
-          />
-        </div>
+
+        {formData.id ? (
+          <>
+            <h3 className="text-4xl font-normal">{formData.formName}</h3>
+            <div className="mt-4 flex justify-center items-center flex-col p-4">
+              <FullForm
+                key={formData.id}
+                fields={formData.inputFields}
+                formName={formData.formName}
+              />
+            </div>
+          </>
+        ) : (
+          <div className="flex justify-center text-3xl">No form to fill</div>
+        )}
       </div>
     </div>
   );

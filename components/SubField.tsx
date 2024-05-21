@@ -180,6 +180,9 @@ export default function SubField({
                           <SelectItem value="switch">Switch</SelectItem>
                           <SelectItem value="button">Button</SelectItem>
                           <SelectItem value="radio">Radio group</SelectItem>
+                          <SelectItem value="imgUpload">
+                            Image Upload
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -212,7 +215,7 @@ export default function SubField({
                   />
                 ) : null}
 
-                {i > 0 && (
+                {i >= 0 && (
                   <div>
                     <Button
                       type="button"

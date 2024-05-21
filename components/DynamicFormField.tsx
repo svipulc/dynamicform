@@ -1,7 +1,7 @@
 "use client";
 
 // Library import
-import React, { SyntheticEvent } from "react";
+import React from "react";
 import { Control, FieldValues, UseFormReturn } from "react-hook-form";
 
 // UI import
@@ -13,13 +13,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "./ui/button";
 import { Switch } from "./ui/switch";
@@ -29,6 +22,8 @@ import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 
 // constant type import
 import { InputField } from "@/constant";
+import { Label } from "./ui/label";
+import ImageUploadField from "./ImageUploadField";
 
 interface DynamicFormFieldProps {
   control: Control<FieldValues, any>;
@@ -44,6 +39,7 @@ export default function DynamicFormField({
 DynamicFormFieldProps) {
   // required switch method to display different input method and option
   const { register } = form;
+
   switch (inField.type) {
     case "text":
       return (
@@ -207,13 +203,14 @@ DynamicFormFieldProps) {
               <FormControl>
                 <Checkbox
                   {...register(`${inField.inputName}`, {
-                    required: inField.required,
+                    // required: inField.required,
                   })}
                   checked={field.value ? field.value : false}
                   onCheckedChange={field.onChange}
                 />
               </FormControl>
               <div className="space-y-1 leading-none">
+                {field.value ? "yes" : "no"}
                 <FormLabel>
                   {inField.inputLabel}
                   {inField.required && <sup className="text-red-500">*</sup>}
@@ -316,5 +313,8 @@ DynamicFormFieldProps) {
           )}
         />
       );
+
+    case "imgUpload":
+      return <ImageUploadField form={form} inField={inField} />;
   }
 }

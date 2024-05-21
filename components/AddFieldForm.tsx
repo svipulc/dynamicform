@@ -180,6 +180,9 @@ export default function AddFieldForm({
                                 <SelectItem value="textArea">
                                   Text Area
                                 </SelectItem>
+                                <SelectItem value="imgUpload">
+                                  Image Upload
+                                </SelectItem>
                                 <SelectItem value="switch">Switch</SelectItem>
                                 <SelectItem value="button">Button</SelectItem>
                                 <SelectItem value="radio">
